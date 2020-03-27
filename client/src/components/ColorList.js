@@ -29,14 +29,26 @@ const ColorList = ({ colors, updateColors }) => {
     })
     .catch(err => console.log(err));
   };
-  
+  const addColor = color => {
+    axiosWithAuth()
+        .post('/api/colors/', color)
+        .then(res => {
+          updateColors([...colors.filter(color =>color.id !== colorToEdit.id), res.data])
+        })
+        .catch(err => console.log(err));
+}
 
   const deleteColor = color => {
     // make a delete request to delete this color
     axiosWithAuth().delete(`api/colors/${color.id}`)
     .then(()=> updateColors(colors.filter(e => e.id !== color.id)))
   };
-
+  const handleChange = (event) => {
+    setColorToEdit({
+        ...colors,
+        [event.target.name]: event.target.value,
+    })
+}
   return (
     <div className="colors-wrap">
       <p>colors</p>
@@ -92,6 +104,27 @@ const ColorList = ({ colors, updateColors }) => {
       )}
       <div className="spacer" />
       {/* stretch - build another form here to add a color */}
+      <form onSubmit={addColor}>
+            <div className='formRow'>
+                <label htmlFor='username'>Color Name:</label>
+                <input type='text' id='color' name='color' onChange={e =>
+                setColorToEdit({ ...colorToEdit, color: e.target.value })
+              }
+              value={colorToEdit.color}/>
+            </div>
+            <div className='formRow'>
+                <label htmlFor='hey'>hex:</label>
+                <input type='text' id='hex' name='hex'  onChange={e =>
+                setColorToEdit({
+                  ...colorToEdit,
+                  code: { hex: e.target.value }
+                })
+              }
+              value={colorToEdit.code.hex}/>
+            </div>
+            <button type='submit'>add color</button>
+           
+        </form>
     </div>
   );
 
