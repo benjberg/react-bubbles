@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import Login from "./components/Login";
@@ -11,7 +11,7 @@ function App() {
     <Router>
       <div className="App">
         <Route exact path="/" component={Login} />
-       <PrivateRoute path='BubblesPage' component={BubblePage}/>
+       <PrivateRoute exact path='/BubblesPage' component={BubblePage}/>
       </div>
     </Router>
   );
